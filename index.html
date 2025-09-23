@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Mart</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+   <!-- Preloader -->
+<div id="pageLoader">
+  <div class="logo-bounce">M&amp;M</div>
+</div>
+
+
+   <header>
+    <nav class="navbar">
+        <div class="brand">M&M</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search Products...">
+            <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="nav-icons desktop-only">
+            <div class="icon-container" id="cart-container">
+               <i class="fa-solid fa-bag-shopping"></i>
+                <div class="dropdown" id="cart-dropdown">
+                    <p>Total Items: <span id="cart-count">0</span></p>
+                    <p>Toatal Price: $ <span id="cart-total"></span></p>
+                    <a href="cart.html"><button>See Cart</button></a>
+                </div>
+            </div>
+            <div class="icon-container" id="account-container">
+                <i class="fa-regular fa-user"></i>
+                <div class="dropdown" id="account-dropdown">
+                    <a href="#">Login/Sing In</a>
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                </div>
+            </div>
+        </div>
+    <div class="hamburger mobile-only" id="hamburger">
+        ☰
+      </div>
+    </nav>
+
+   
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#"><i class="fa-regular fa-cart-shopping"></i> Cart</a>
+      <a href="#"><i class="fa-regular fa-user"></i> Login / Sign In</a>
+      <a href="#">Profile</a>
+      <a href="#">Settings</a>
+    </div>
+
+   </header>
+   <section class="hero">
+    <h1 class="greeting">
+        <span id="typewriter"></span>
+    </h1>
+   </section>
+   <section class="categories">
+    <div class="category">
+       <a href="fashion.html" style="text-decoration: none; color: inherit;"> <i class="fa-solid fa-shirt"></i>
+        <span>Fashion</span></a>
+    </div>
+    <div class="category">
+       <a href="beauty.html"> <i class="fa-solid fa-spray-can-sparkles"></i>
+        <span>Beauty</span></a>
+    </div>
+    <div class="category">
+        <a href="Mobile.html">
+            <i class="fa-solid fa-mobile-screen"></i>
+    <span>Mobile</span></a>
+    </div>
+    <div class="category">
+        <a href="electronics.html"><i class="fa-solid fa-tv"></i>
+    <span>Electronics</span></a>
+    </div>
+    <div class="category">
+       <a href="homeappliance.html"> <i class="fa-solid fa-house-chimney"></i>
+    <span>Home Appliances</span></a>
+    </div>
+    <div class="category">
+       <a href="food.html"> <i class="fa fa-cutlery" aria-hidden="true"></i>
+    <span>Food</span></a>
+    </div>
+    <div class="category">
+        <a href="groceries.html"><i class="fa-solid fa-apple-whole"></i>
+    <span>Groceries</span></a>
+    </div>
+    <div class="category">
+        <a href="accessories.html"><i class="fa-solid fa-gem"></i>
+        <span>Accessories</span></a>
+    </div>
+    <div class="category">
+       <a href="medicines.html"> <i class="fa-solid fa-pills"></i>
+        <span>Medicines</span></a>
+    </div>
+    <div class="category">
+       <a href="travel.html"> <i class="fa fa-plane"></i>
+        <span>Travel</span></a>
+    </div>
+   </section>
+   <section class="banner">
+    <div class="banner-container">
+        <div class="banner-slide active">
+            <img src="assets/banners/banner 1.png" alt="">
+        </div>
+        <div class="banner-slide">
+            <img src="assets/banners/banner 2.png" alt="">
+        </div>
+        <div class="banner-slide">
+            <img src="assets/banners/banner 3.png" alt="">
+        </div>
+    </div>
+    <div class="progress-bar" id="progress-bar"></div>
+   </section>
+   <section class="best-selling">
+    <h2 class="section-title">Best Selling</h2>
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="assets/Best selling product/product 1.jpeg" alt="product 1">
+            <div class="product-info">
+                <h3>Iphone 17 Pro</h3>
+            <p class="price"> ₹1,49,900</p>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="assets/Best selling product/product 2.jpeg" alt="product 2">
+            <div class="product-info">
+                <h3>Tuf Gamming</h3>
+            <p class="price"> ₹56,000</p>
+            </div>
+        </div>
+        <div class="product-card">
+            <img src="assets/Best selling product/product 3.png" alt="product 3">
+           <div class="product-info">
+             <h3>US Polo T-shirt</h3>
+            <p class="price"> ₹350</p>
+           </div>
+        </div>
+    </div>
+   </section>
+   <section class="deals-of-day">
+    <h2 class="section-title">Deals of the Day</h2>
+    <div class="coountdown" id="countdown">Ends in 00:00:00</div>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="assets/deal of the day/deal 1.webp" alt="Deal 1">
+            <div class="product-info">
+                <h3>OnePluse Nord Buds 2pro</h3>
+                <p class="old-price">₹2,299</p>
+                <p class="price">₹1,499 <span class="discount">-40%</span></p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="assets/deal of the day/deal 2.webp" alt="Deal 2">
+            <div class="product-info">
+                <h3>FireBolt Watch</h3>
+                <p class="old-price">₹2,999</p>
+                <p class="price">₹1,499 <span class="discount">-50%</span></p>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="assets/deal of the day/deal 3.webp" alt="Deal 3">
+            <div class="product-info">
+                <h3>Acer Monitor</h3>
+                <p class="old-price">₹8,299</p>
+                <p class="price">₹6,299 <span class="discount">-24%</span></p>
+            </div>
+        </div>
+
+
+    </div>
+   </section>
+    <section class="newsletter">
+        <h2>Stay Updated!</h2>
+        <p>Subscribe to our newsletter for the latest deals and updates.</p>
+        <form action="" class="newsletter-form">
+            
+            <input type="text" placeholder="Enter your Name" required>
+            <input type="email" placeholder="Enter your emsil" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

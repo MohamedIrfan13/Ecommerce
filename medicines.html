@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicines</title>
+    <link rel="stylesheet" href="MedicinesPage/medicinesstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+
+
+     <header>
+    <nav class="navbar">
+        <div class="brand">M&M</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search Products...">
+            <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="nav-icons desktop-only">
+            <div class="icon-container" id="cart-container">
+               <i class="fa-solid fa-bag-shopping"></i>
+                <div class="dropdown" id="cart-dropdown">
+                    <p>Total Items: <span id="cart-count">0</span></p>
+                    <p>Toatal Price: $ <span id="cart-total"></span></p>
+                    <button>See Cart</button>
+                </div>
+            </div>
+            <div class="icon-container" id="account-container">
+                <i class="fa-regular fa-user"></i>
+                <div class="dropdown" id="account-dropdown">
+                    <a href="#">Login/Sing In</a>
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                </div>
+            </div>
+        </div>
+    <div class="hamburger mobile-only" id="hamburger">
+        ☰
+      </div>
+    </nav>
+
+   
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#"><i class="fa-regular fa-cart-shopping"></i> Cart</a>
+      <a href="#"><i class="fa-regular fa-user"></i> Login / Sign In</a>
+      <a href="#">Profile</a>
+      <a href="#">Settings</a>
+    </div>
+
+   </header>
+   <section class="medicine-section">
+  <!-- Disclaimer Popup -->
+  <div class="disclaimer-popup" id="disclaimer-popup">
+    <div class="popup-content">
+      <h2>Disclaimer</h2>
+      <p>Please always consult your doctor before taking medicines.</p>
+      <div class="popup-buttons">
+        <button id="prescription-btn">I Have Prescription</button>
+        <button id="hospital-btn">Suggest Me a Nearest Hospital</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Prescription Form -->
+  <div class="upload-section" id="upload-section" style="display:none;">
+    <h2>Upload Prescription</h2>
+    <p>Please upload your valid prescription to continue.</p>
+    <input type="file" id="prescription-file" accept=".jpg,.jpeg,.png,.pdf">
+    <button id="upload-submit">Submit</button>
+  </div>
+
+  <!-- Medicines Content -->
+  <div class="medicine-content" id="medicine-content" style="display:none;">
+    <h2>Medicines</h2>
+    <div class="medicine-categories">
+      <div class="category-card">Tablets</div>
+      <div class="category-card">Syrups</div>
+      <div class="category-card">Injections</div>
+      <div class="category-card">First Aid</div>
+      <div class="category-card">Health Supplements</div>
+    </div>
+  </div>
+</section>
+<script >
+    // medicines page
+
+document.addEventListener("DOMContentLoaded", () => {
+  const popup = document.getElementById("disclaimer-popup");
+  const uploadSection = document.getElementById("upload-section");
+  const medicineContent = document.getElementById("medicine-content");
+
+  // Button: I Have Prescription
+  document.getElementById("prescription-btn").addEventListener("click", () => {
+    popup.style.display = "none";
+    uploadSection.style.display = "block"; // Show upload form
+  });
+
+  // Button: Suggest me a nearest hospital
+  document.getElementById("hospital-btn").addEventListener("click", () => {
+    alert("We will suggest nearest hospitals soon. For now, please search in Google Maps.");
+  });
+
+  // Upload Submit
+  document.getElementById("upload-submit").addEventListener("click", () => {
+    const fileInput = document.getElementById("prescription-file");
+    if (fileInput.files.length === 0) {
+      alert("Please upload a prescription file first!");
+      return;
+    }
+
+    // For now, just simulate upload success
+    uploadSection.style.display = "none";
+    medicineContent.style.display = "block"; // Show medicine categories
+    alert("Prescription uploaded successfully! Now you can browse medicines.");
+  });
+});
+
+
+</script>
+
+<script src="js/cart.js"></script>
+
+</body>
+</html>

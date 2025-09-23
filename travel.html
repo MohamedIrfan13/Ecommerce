@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel</title>
+    <link rel="stylesheet" href="TravelPage/travelstyle.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+
+
+
+
+    <header>
+    <nav class="navbar">
+        <div class="brand">M&M</div>
+
+        <div class="search-bar">
+            <input type="text" placeholder="Search Products...">
+            <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="nav-icons desktop-only">
+            <div class="icon-container" id="cart-container">
+               <i class="fa-solid fa-bag-shopping"></i>
+                <div class="dropdown" id="cart-dropdown">
+                    <p>Total Items: <span id="cart-count">0</span></p>
+                    <p>Toatal Price: $ <span id="cart-total"></span></p>
+                    <button>See Cart</button>
+                </div>
+            </div>
+            <div class="icon-container" id="account-container">
+                <i class="fa-regular fa-user"></i>
+                <div class="dropdown" id="account-dropdown">
+                    <a href="#">Login/Sing In</a>
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                </div>
+            </div>
+        </div>
+    <div class="hamburger mobile-only" id="hamburger">
+        ☰
+      </div>
+    </nav>
+
+   
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#"><i class="fa-regular fa-cart-shopping"></i> Cart</a>
+      <a href="#"><i class="fa-regular fa-user"></i> Login / Sign In</a>
+      <a href="#">Profile</a>
+      <a href="#">Settings</a>
+    </div>
+
+   </header>
+
+    <section class="travel-hero">
+  <div class="hero-overlay">
+    
+    <div class="booking-form">
+      <h2>Plan Your Trip</h2>
+      <form id="travelForm">
+        <div class="form-grid">
+          <input type="text" placeholder="From" required>
+          <input type="text" placeholder="To" required>
+          <input type="date" required>
+          <input type="date" required>
+          <select required>
+            <option value="">Travel Type</option>
+            <option value="car">Car</option>
+            <option value="boat">Boat</option>
+            <option value="flight">Flight</option>
+          </select>
+          <button type="submit" class="search-btn">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Popup Message -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <p>⚠️ Sorry for the inconvenience.<br> This service is not available at the moment.</p>
+    <button id="closePopup">OK</button>
+  </div>
+</div>
+
+<script>
+ 
+  const travelForm = document.getElementById("travelForm");
+  const popup = document.getElementById("popup");
+  const closePopup = document.getElementById("closePopup");
+
+  travelForm.addEventListener("submit", (e) => {
+    e.preventDefault(); // prevent actual form submission
+    popup.style.display = "flex";
+  });
+
+  closePopup.addEventListener("click", () => {
+    popup.style.display = "none";
+  });
+
+  // Close popup if user clicks outside
+  window.addEventListener("click", (e) => {
+    if (e.target === popup) {
+      popup.style.display = "none";
+    }
+  });
+
+   
+
+</script>
+
+</body>
+</html>
