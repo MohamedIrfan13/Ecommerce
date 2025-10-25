@@ -61,25 +61,25 @@
       <h3>Filter</h3>
       <div class="filter-group">
         <h4>Brand</h4>
-        <label><input type="checkbox"> L’Oréal</label>
-        <label><input type="checkbox"> Maybelline</label>
-        <label><input type="checkbox"> Lakmé</label>
-        <label><input type="checkbox"> Nykaa</label>
+        <label><input type="checkbox" class="filter" data-filter="brand" value="loreal"> L’Oréal</label>
+        <label><input type="checkbox" class="filter" data-filter="brand" value="maybelline"> Maybelline</label>
+        <label><input type="checkbox" class="filter" data-filter="brand" value="lakme"> Lakmé</label>
+        <label><input type="checkbox" class="filter" data-filter="brand" value="nykaa"> Nykaa</label>
       </div>
 
       <div class="filter-group">
         <h4>Category</h4>
-        <label><input type="checkbox"> Makeup</label>
-        <label><input type="checkbox"> Skincare</label>
-        <label><input type="checkbox"> Haircare</label>
-        <label><input type="checkbox"> Fragrances</label>
+        <label><input type="checkbox" class="filter" data-filter="category" value="makeup"> Makeup</label>
+        <label><input type="checkbox" class="filter" data-filter="category" value="skincare"> Skincare</label>
+        <label><input type="checkbox" class="filter" data-filter="category" value="haircare"> Haircare</label>
+        <label><input type="checkbox" class="filter" data-filter="category" value="fragrances"> Fragrances</label>
       </div>
 
       <div class="filter-group">
         <h4>Price</h4>
-        <label><input type="checkbox"> ₹0 – ₹500</label>
-        <label><input type="checkbox"> ₹500 – ₹2000</label>
-        <label><input type="checkbox"> ₹2000+</label>
+        <label><input type="checkbox" class="filter" data-filter="price" value="low"> ₹0 – ₹500</label>
+        <label><input type="checkbox" class="filter" data-filter="price" value="mid"> ₹500 – ₹2000</label>
+        <label><input type="checkbox" class="filter" data-filter="price" value="high"> ₹2000+</label>
       </div>
     </aside>
 
@@ -101,7 +101,7 @@
 
       <!-- Product Grid -->
       <div class="product-grid">
-        <div class="product-card">
+        <div class="product-card" data-brand="maybelline" data-category="makeup" data-price="499">
           <img src="BeautyPage/Maybelline Lipstick.avif" alt="Lipstick">
           <div class="product-info">
             <h3>Maybelline Lipstick</h3>
@@ -113,7 +113,7 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-brand="loreal" data-category="Skincare" data-price="1299">
           <img src="BeautyPage/L’Oréal Foundation.jpg" alt="Foundation">
           <div class="product-info">
             <h3>L’Oréal Foundation</h3>
@@ -125,7 +125,7 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-brand="nykaa" data-category="fragrances" data-price="1899">
           <img src="BeautyPage/Nykaa Perfume.jpg" alt="Perfume">
           <div class="product-info">
             <h3>Nykaa Perfume</h3>
@@ -142,60 +142,182 @@
   <script src="js/cart.js"></script>
 
   <script>
-
-    if (!localStorage.getItem("cart")) {
-    localStorage.setItem("cart", JSON.stringify([]));
-}
-
-// Add to Cart Function
-function addToCart(product) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Check if item already exists by name
-    let existing = cart.find(item => item.name === product.name);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartUI();
-}
-
-// Update Cart Count + Total Price
-function updateCartUI() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-    document.getElementById("cart-count").innerText = totalItems;
-    document.getElementById("cart-total").innerText = totalPrice;
-}
-
-document.querySelectorAll(".cart-btn").forEach(button => {
-    button.addEventListener("click", () => {
-        let product = {
-            name: button.dataset.name,
-            price: parseInt(button.dataset.price),
-            img: button.dataset.img
-        };
-        addToCart(product);
+    document.addEventListener("DOMContentLoaded", () => {
+      // ✅ Initialize cart
+      if (!localStorage.getItem("cart")) {
+        localStorage.setItem("cart", JSON.stringify([]));
+      }
+    
+      // ✅ Add to Cart
+      function addToCart(product) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let existing = cart.find(item => item.name === product.name);
+    
+        if (existing) {
+          if (existing.quantity < 10) {
+            existing.quantity += 1;
+          } else {
+            alert("Maximum limit of 10 reached for this item!");
+          }
+        } else {
+          cart.push({ ...product, quantity: 1 });
+        }
+    
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartUI();
+        updateProductButtons();
+      }
+    
+      // ✅ Update Cart count & total
+      function updateCartUI() {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+        document.getElementById("cart-count").innerText = totalItems;
+        document.getElementById("cart-total").innerText = totalPrice;
+      }
+    
+      // ✅ Update Quantity
+      function updateQuantity(name, change) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let item = cart.find(i => i.name === name);
+        if (!item) return;
+    
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          cart = cart.filter(i => i.name !== name);
+        } else if (item.quantity > 10) {
+          item.quantity = 10;
+          alert("Limit of 10 reached!");
+        }
+    
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartUI();
+        updateProductButtons();
+      }
+    
+      // ✅ Convert "Add to Cart" to Qty Controls
+      function updateProductButtons() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+        document.querySelectorAll(".product-card").forEach(card => {
+          const info = card.querySelector(".product-info");
+          const name = card.querySelector("h3").innerText;
+          const price = parseInt(card.dataset.price);
+          const img = card.querySelector("img").src;
+          const cartItem = cart.find(item => item.name === name);
+    
+          // Clear existing button/controls
+          const old = info.querySelector(".cart-btn, .qty-controls");
+          if (old) old.remove();
+    
+          // If in cart → show quantity controls
+          if (cartItem) {
+            const controls = document.createElement("div");
+            controls.classList.add("qty-controls");
+            controls.dataset.name = name;
+            controls.innerHTML = `
+              <button class="dec">-</button>
+              <span class="qty">${cartItem.quantity}</span>
+              <button class="inc">+</button>
+            `;
+            info.appendChild(controls);
+          } else {
+            const btn = document.createElement("button");
+            btn.classList.add("cart-btn");
+            btn.dataset.name = name;
+            btn.dataset.price = price;
+            btn.dataset.img = img;
+            btn.innerText = "Add to Cart";
+            info.appendChild(btn);
+          }
+        });
+    
+        attachCartEvents();
+      }
+    
+      // ✅ Attach events for cart and quantity buttons
+      function attachCartEvents() {
+        // Add-to-cart
+        document.querySelectorAll(".cart-btn").forEach(button => {
+          button.addEventListener("click", () => {
+            const product = {
+              name: button.dataset.name,
+              price: parseInt(button.dataset.price),
+              img: button.dataset.img
+            };
+            addToCart(product);
+          });
+        });
+    
+        // Increase quantity
+        document.querySelectorAll(".qty-controls .inc").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const name = btn.parentElement.dataset.name;
+            updateQuantity(name, +1);
+          });
+        });
+    
+        // Decrease quantity
+        document.querySelectorAll(".qty-controls .dec").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const name = btn.parentElement.dataset.name;
+            updateQuantity(name, -1);
+          });
+        });
+      }
+    
+      // ✅ Filter functionality (based on gender & price)
+      const filters = document.querySelectorAll(".filter");
+      const products = document.querySelectorAll(".product-card");
+    
+      filters.forEach(filter => filter.addEventListener("change", applyFilters));
+    
+      function applyFilters() {
+        const activeFilters = { gender: [], price: [] };
+    
+        filters.forEach(f => {
+          if (f.checked) {
+            activeFilters[f.dataset.filter].push(f.value);
+          }
+        });
+    
+        products.forEach(product => {
+          const gender = product.dataset.gender;
+          const price = parseInt(product.dataset.price);
+          let show = true;
+    
+          // Gender filter
+          if (activeFilters.gender.length > 0 && !activeFilters.gender.includes(gender)) {
+            show = false;
+          }
+    
+          // Price filter
+          if (activeFilters.price.length > 0) {
+            show = false;
+            if (activeFilters.price.includes("low") && price <= 1000) show = true;
+            if (activeFilters.price.includes("mid") && price > 1000 && price <= 3000) show = true;
+            if (activeFilters.price.includes("high") && price > 3000) show = true;
+          }
+    
+          product.style.display = show ? "block" : "none";
+        });
+      }
+    
+      // ✅ Mobile filter toggle
+      const filterToggle = document.querySelector(".mobile-filter-toggle");
+      const filterCol = document.getElementById("filter-col");
+      if (filterToggle) {
+        filterToggle.addEventListener("click", () => filterCol.classList.toggle("show"));
+      }
+    
+      // ✅ Initialize on page load
+      updateCartUI();
+      updateProductButtons();
     });
-});
-
-// Load cart UI when page loads
-document.addEventListener("DOMContentLoaded", updateCartUI);
-    // Mobile filter toggle
-    const filterToggle = document.querySelector('.mobile-filter-toggle');
-    const filterCol = document.getElementById('filter-col');
-
-    filterToggle.addEventListener('click', () => {
-      filterCol.classList.toggle('show');
-    });
-
-      
-
-  </script>
+    </script>
+    
+    
 </body>
 </html>
