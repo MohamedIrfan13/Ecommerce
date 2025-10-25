@@ -105,7 +105,9 @@
 
       <!-- Product Grid -->
       <div class="product-grid">
-        <div class="product-card">
+        <div class="product-card"  data-category="Watches" 
+        data-brand="Fossil" 
+        data-price="6999">
           <img src="AccessoriesPage/Fossil Men’s Watch.jpg" alt="Watch">
           <div class="product-info">
             <h3>Fossil Men’s Watch</h3>
@@ -117,7 +119,9 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-category="Sunglasses" 
+        data-brand="Ray-Ban" 
+        data-price="4200">
           <img src="AccessoriesPage/Ray-Ban Sunglasses.jpg" alt="Sunglasses">
           <div class="product-info">
             <h3>Ray-Ban Sunglasses</h3>
@@ -127,7 +131,9 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card"  data-category="Bags" 
+        data-brand="Guess" 
+        data-price="3500">
           <img src="AccessoriesPage/Leather Shoulder Bag.jpeg" alt="Bag">
           <div class="product-info">
             <h3>Leather Shoulder Bag</h3>
@@ -142,52 +148,100 @@
     </main>
   </div>
   <script>
-
     // Initialize cart if not exists
-if (!localStorage.getItem("cart")) {
-    localStorage.setItem("cart", JSON.stringify([]));
-}
-
-// Add to Cart Function
-function addToCart(product) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Check if item already exists by name
-    let existing = cart.find(item => item.name === product.name);
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push({ ...product, quantity: 1 });
+    if (!localStorage.getItem("cart")) {
+        localStorage.setItem("cart", JSON.stringify([]));
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartUI();
-}
+    function getCart() {
+        return JSON.parse(localStorage.getItem("cart")) || [];
+    }
 
-// Update Cart Count + Total Price
-function updateCartUI() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    function saveCart(cart) {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
-    document.getElementById("cart-count").innerText = totalItems;
-    document.getElementById("cart-total").innerText = totalPrice;
-}
+    // Update Cart UI
+    function updateCartUI() {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-document.querySelectorAll(".cart-btn").forEach(button => {
-    button.addEventListener("click", () => {
-        let product = {
+        document.getElementById("cart-count").innerText = totalItems;
+        document.getElementById("cart-total").innerText = totalPrice;
+    }
+
+    // Render quantity controls or Add to Cart
+    function renderProductButton(button) {
+        const name = button.dataset.name;
+        const cart = getCart();
+        const product = cart.find(p => p.name === name);
+
+        if (product) {
+            button.innerHTML = `
+                <button class="decrease" data-name="${name}">-</button>
+                <span class="qty">${product.quantity}</span>
+                <button class="increase" data-name="${name}">+</button>
+            `;
+            button.classList.add("quantity-container");
+
+            // Attach increase/decrease events
+            button.querySelector(".increase").addEventListener("click", () => changeQuantity(name, 1, button));
+            button.querySelector(".decrease").addEventListener("click", () => changeQuantity(name, -1, button));
+        } else {
+            button.innerHTML = "Add to Cart";
+            button.classList.remove("quantity-container");
+        }
+    }
+
+    // Add to Cart
+    function addToCart(product, button) {
+        const cart = getCart();
+        const existing = cart.find(p => p.name === product.name);
+        if (existing) {
+            if (existing.quantity < 10) existing.quantity++;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        saveCart(cart);
+        updateCartUI();
+        renderProductButton(button);
+    }
+
+    // Change quantity
+    function changeQuantity(name, delta, button) {
+        let cart = getCart();
+        const product = cart.find(p => p.name === name);
+        if (!product) return;
+
+        product.quantity += delta;
+
+        if (product.quantity <= 0) {
+            cart = cart.filter(p => p.name !== name);
+        } else if (product.quantity > 10) {
+            product.quantity = 10;
+        }
+
+        saveCart(cart);
+        updateCartUI();
+        renderProductButton(button);
+    }
+
+    // Initialize buttons
+    document.querySelectorAll(".cart-btn").forEach(button => {
+        const product = {
             name: button.dataset.name,
             price: parseInt(button.dataset.price),
             img: button.dataset.img
         };
-        addToCart(product);
+        renderProductButton(button); // Render quantity if already in cart
+        button.addEventListener("click", () => addToCart(product, button));
     });
-});
 
-// Load cart UI when page loads
-document.addEventListener("DOMContentLoaded", updateCartUI);
-
+    // Load cart on page load
+    document.addEventListener("DOMContentLoaded", () => {
+        updateCartUI();
+    });
 
     // Mobile filter toggle
     const filterToggle = document.querySelector('.mobile-filter-toggle');
@@ -197,9 +251,41 @@ document.addEventListener("DOMContentLoaded", updateCartUI);
       filterCol.classList.toggle('show');
     });
 
-     
+    // FILTER
+    const checkboxes = document.querySelectorAll(".filter-col input[type='checkbox']");
+    const products = document.querySelectorAll(".product-card");
 
-  </script>
+    checkboxes.forEach(cb => cb.addEventListener("change", applyFilters));
+
+    function applyFilters() {
+      let selectedCategories = [];
+      let selectedBrands = [];
+      let selectedPrices = [];
+
+      document.querySelectorAll(".filter-group:nth-of-type(1) input:checked").forEach(cb => selectedCategories.push(cb.parentElement.innerText.trim()));
+      document.querySelectorAll(".filter-group:nth-of-type(2) input:checked").forEach(cb => selectedBrands.push(cb.parentElement.innerText.trim()));
+      document.querySelectorAll(".filter-group:nth-of-type(3) input:checked").forEach(cb => selectedPrices.push(cb.parentElement.innerText.trim()));
+
+      products.forEach(product => {
+        const category = product.dataset.category;
+        const brand = product.dataset.brand;
+        const price = parseInt(product.dataset.price);
+
+        let priceMatch = selectedPrices.length === 0 || selectedPrices.some(range => {
+            if (range.includes("0 – ₹1,000")) return price <= 1000;
+            if (range.includes("₹1,000 – ₹5,000")) return price >= 1000 && price <= 5000;
+            if (range.includes("₹5,000+")) return price > 5000;
+        });
+
+        const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(category);
+        const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(brand);
+
+        product.style.display = (categoryMatch && brandMatch && priceMatch) ? "block" : "none";
+      });
+    }
+</script>
+
+
   <script src="cart.js"></script>
 
 </body>
